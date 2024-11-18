@@ -1,0 +1,23 @@
+# Bazowy obraz z Pythonem
+FROM python:3.9-slim
+
+# Instalacja systemowych zależności
+RUN apt-get update && apt-get install -y \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Ustawienie katalogu roboczego
+WORKDIR /app
+
+# Kopiowanie plików projektu
+COPY . .
+
+# Instalacja zależności Pythona
+RUN pip install --no-cache-dir ultralytics opencv-python-headless paho-mqtt
+
+# Komenda uruchamiająca aplikację
+CMD ["python", "app.py"]
