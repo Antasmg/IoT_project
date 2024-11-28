@@ -27,7 +27,7 @@ Moduł ESP32 (lub ESP8266) współpracuje z cyfrowym czujnikiem temperatury i wi
 * Komunikacja:
   Komunikacja między ESP a czujnikiem odbywa się w protokole jednoliniowym. Odczyt danych wymaga odpowiedniego oprogramowania, które inicjuje transmisję i interpretuje dane o temperaturze oraz wilgotności. Popularne biblioteki, takie jak Adafruit DHT Library, upraszczają implementację.
   
-```
+```C
 void readDHT(float &humidity, float &temperature, float &fahrenheit) {
   humidity = dht.readHumidity();
   temperature = dht.readTemperature();
@@ -52,7 +52,7 @@ Wyświetlacz LCD został podłączony do ESP za pomocą protokołu I2C, co znacz
   
   **SDA (Serial Data):** Linia danych, przesyłająca informacje między ESP a wyświetlaczem.
 
-```
+```C
 void displayData(float humidity, float temperature) {
   display.clearDisplay();
   display.setCursor(0,0);
