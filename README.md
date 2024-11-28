@@ -18,7 +18,27 @@ Projekt skupia się na wykorzystaniu mikrokontrolera ESP3866 do następujących 
 
 ### ESP32 Temperatura oraz Ekran ###
 
-ESP8266 dokonuje odczytów z czujnika DHT11 za pomocą dowolnego pinu cyfrowego ( w naszym przypadku pin 11 ), z ESP do modułu jest dostarczane zasilanie na linii 3.3V oraz lini GND. 
+#### Odczyt temperatury z czujnika DHT11 #### 
+Moduł ESP32 (lub ESP8266) współpracuje z cyfrowym czujnikiem temperatury i wilgotności DHT11. Odczyt odbywa się przez dowolny pin cyfrowy, w naszym przypadku jest to pin 11. Czujnik ten dostarcza zarówno dane o temperaturze, jak i wilgotności w formacie cyfrowym, co eliminuje konieczność stosowania przetworników analogowo-cyfrowych.
+
+* Zasilanie czujnika:
+  Czujnik DHT11 wymaga napięcia zasilania w zakresie od 3.3V do 5V. W naszym przypadku zasilanie jest dostarczane przez linię 3.3V z ESP. Linia GND zapewnia masę do układu.
+
+* Komunikacja:
+  Komunikacja między ESP a czujnikiem odbywa się w protokole jednoliniowym. Odczyt danych wymaga odpowiedniego oprogramowania, które inicjuje transmisję i interpretuje dane o temperaturze oraz wilgotności. Popularne biblioteki, takie jak Adafruit DHT Library, upraszczają implementację.
+
+#### Obsługa wyświetlacza przez I2C ####
+Wyświetlacz LCD został podłączony do ESP za pomocą protokołu I2C, co znacząco redukuje liczbę wymaganych linii połączeń. Wyświetlacz pełni funkcję prezentacji danych, takich jak odczyty z czujnika temperatury i inne komunikaty systemowe.
+
+* Zasilanie wyświetlacza:
+  Wyświetlacz wymaga zasilania w postaci napięcia 5V, które jest dostarczane przez ESP. Linie GND obu urządzeń są wspólne i umożliwiają prawidłowe działanie układu.
+
+* Linie sygnałowe I2C:
+  Standardowe połączenie I2C wykorzystuje dwie linie sygnałowe:
+
+  **SCL (Serial Clock):** Linia zegara, synchronizująca komunikację.
+  **SDA (Serial Data):** Linia danych, przesyłająca informacje między ESP a wyświetlaczem.
+
 
 ### Docker - Grafana oraz InfluxDB ###
 
