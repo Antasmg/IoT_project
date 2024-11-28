@@ -4,6 +4,31 @@
 * Antoni Marcinek 
 * Michał Piechowski
 
+## Spis Treści ## 
+
+1. [Projekt IoT](#projekt-iot)
+   - [Autorzy projektu](#autorzy-projektu)
+   - [Opis projektu](#opis-projektu)
+
+2. [ESP32 Temperatura oraz Ekran](#esp32-temperatura-oraz-ekran)
+   - [Odczyt temperatury z czujnika DHT11](#odczyt-temperatury-z-czujnika-dht11)
+   - [Obsługa wyświetlacza przez I2C](#obsługa-wyświetlacza-przez-i2c)
+
+3. [Docker - Grafana oraz InfluxDB](#docker---grafana-oraz-influxdb)
+   - [InfluxDB: Przechowywanie danych pomiarowych](#influxdb-przechowywanie-danych-pomiarowych)
+   - [Grafana: Wizualizacja danych](#grafana-wizualizacja-danych)
+   - [Korzyści ze współpracy InfluxDB i Grafany](#korzyści-ze-współpracy-influxdb-i-grafany)
+
+4. [Speech-to-Text](#speech-to-text)
+   - [Ogólny opis technologii](#ogólny-opis-technologii-1)
+   - [Działanie w projekcie](#działanie-w-projekcie)
+   - [Zastosowane technologie](#zastosowane-technologie)
+
+5. [Video-to-Text](#video-to-text)
+   - [Ogólny opis technologii](#ogólny-opis-technologii-2)
+   - [Działanie w projekcie](#działanie-w-projekcie-1)
+   - [Zastosowane technologie](#zastosowane-technologie-1)
+
 ## Opis projektu ##
 
 Projekt skupia się na wykorzystaniu mikrokontrolera ESP3866 do następujących zadań:
