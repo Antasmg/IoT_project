@@ -17,7 +17,6 @@
 3. [Docker - Grafana oraz InfluxDB](#docker---grafana-oraz-influxdb)
    - [InfluxDB: Przechowywanie danych pomiarowych](#influxdb-przechowywanie-danych-pomiarowych)
    - [Grafana: Wizualizacja danych](#grafana-wizualizacja-danych)
-   - [Korzyści ze współpracy InfluxDB i Grafany](#korzyści-ze-współpracy-influxdb-i-grafany)
 
 4. [Speech-to-Text](#speech-to-text)
    - [Ogólny opis technologii](#ogólny-opis-technologii-1)
