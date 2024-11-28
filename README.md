@@ -27,14 +27,17 @@ Moduł ESP32 (lub ESP8266) współpracuje z cyfrowym czujnikiem temperatury i wi
 * Komunikacja:
   Komunikacja między ESP a czujnikiem odbywa się w protokole jednoliniowym. Odczyt danych wymaga odpowiedniego oprogramowania, które inicjuje transmisję i interpretuje dane o temperaturze oraz wilgotności. Popularne biblioteki, takie jak Adafruit DHT Library, upraszczają implementację.
   
-`void readDHT(float &humidity, float &temperature, float &fahrenheit) {
+```
+void readDHT(float &humidity, float &temperature, float &fahrenheit) {
   humidity = dht.readHumidity();
   temperature = dht.readTemperature();
   fahrenheit = dht.readTemperature(true);
+
   if (isnan(humidity) || isnan(temperature) || isnan(fahrenheit)) {
     display.println(F("Failed to read from DHT sensor!"));
   }
-}`
+}
+```
 
 #### Obsługa wyświetlacza przez I2C ####
 Wyświetlacz LCD został podłączony do ESP za pomocą protokołu I2C, co znacząco redukuje liczbę wymaganych linii połączeń. Wyświetlacz pełni funkcję prezentacji danych, takich jak odczyty z czujnika temperatury i inne komunikaty systemowe.
@@ -49,7 +52,8 @@ Wyświetlacz LCD został podłączony do ESP za pomocą protokołu I2C, co znacz
   
   **SDA (Serial Data):** Linia danych, przesyłająca informacje między ESP a wyświetlaczem.
 
-`void displayData(float humidity, float temperature) {
+```
+void displayData(float humidity, float temperature) {
   display.clearDisplay();
   display.setCursor(0,0);
   display.print(F("Wilgotnosc: "));
@@ -60,7 +64,8 @@ Wyświetlacz LCD został podłączony do ESP za pomocą protokołu I2C, co znacz
   display.print(temperature);
   display.print(F("C"));
   display.display();
-}`
+}
+```
 
 ### Docker - Grafana oraz InfluxDB ###
 
