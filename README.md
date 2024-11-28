@@ -68,6 +68,38 @@ void displayData(float humidity, float temperature) {
 
 ### Docker - Grafana oraz InfluxDB ###
 
+#### InfluxDB: Przechowywanie danych pomiarowych ####
+
+InfluxDB jest bazą danych zaprojektowaną do przechowywania i analizy danych szeregów czasowych, takich jak odczyty temperatury z czujnika DHT11. W projekcie InfluxDB działa jako kontener Docker, co upraszcza proces instalacji, konfiguracji i utrzymania systemu.
+
+* Funkcjonalność:
+
+  Przechowywanie danych w formacie szeregów czasowych (timestamp + wartość).
+  Możliwość szybkiego wyszukiwania i agregacji danych historycznych.
+  Integracja z narzędziami wizualizacyjnymi, takimi jak Grafana.
+
+* **Konfiguracja kontenera:** Kontener InfluxDB jest zarządzany za pomocą pliku docker-compose.yml. W pliku określono:
+
+  Mapowanie portów, aby baza była dostępna na hoście.
+  Wolumeny do przechowywania danych w sposób trwały.
+  Ustawienia uwierzytelniania (opcjonalnie).
+
+#### Grafana: Wizualizacja danych ####
+Grafana jest narzędziem do tworzenia zaawansowanych wykresów i dashboardów, które w projekcie służą do prezentowania danych z InfluxDB. Dzięki intuicyjnemu interfejsowi użytkownika, Grafana umożliwia:
+
+Tworzenie dynamicznych wykresów temperatury w czasie rzeczywistym.
+
+Monitorowanie historii odczytów oraz trendów.
+
+Konfigurację alertów w przypadku przekroczenia określonych wartości.
+
+**Konfiguracja kontenera:** Grafana działa również w kontenerze Docker, co umożliwia łatwe wdrożenie. Połączono ją z InfluxDB, konfigurując odpowiednie źródło danych.
+
+**Przykładowy dashboard:** W Grafanie można utworzyć dashboard wyświetlający dane z InfluxDB. Wykres temperatury w czasie prezentuje dane pobrane z MQTT, zapisane w bazie, co pozwala na:
+Analizę odczytów w różnych przedziałach czasowych.
+Wykorzystanie statystyk (np. średnia temperatura, maksymalna wartość).
+Wizualizację danych w formie tabel, wykresów liniowych, słupkowych czy wskaźników.
+
 ### Speech-to-text ###
 
 ### Video-to-text ###
