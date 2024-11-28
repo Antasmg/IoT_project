@@ -40,6 +40,8 @@ Projekt skupia się na wykorzystaniu mikrokontrolera ESP3866 do następujących 
 * Wykorzystanie modułu ESP8266 w celu wykonywania operacji Speech-to-text za pomocą modelu językowego Whisper,
 * Wykorzystanie modułu ESP8266 w celu rozpoznawania obrazu za pomocą modelu językowego YOLO.
 
+Dokładniejsze opisy każdego z zastosowanych elementów projektów znajduje się w podkatalogach. Opis na tej stronie jest oględny i ma za zadanie ogólne pokazanie wykorzystanych technologii. 
+
 ### ESP32 Temperatura oraz Ekran ###
 
 #### Odczyt temperatury z czujnika DHT11 #### 
@@ -51,18 +53,6 @@ Moduł ESP32 (lub ESP8266) współpracuje z cyfrowym czujnikiem temperatury i wi
 * Komunikacja:
   Komunikacja między ESP a czujnikiem odbywa się w protokole jednoliniowym. Odczyt danych wymaga odpowiedniego oprogramowania, które inicjuje transmisję i interpretuje dane o temperaturze oraz wilgotności. Popularne biblioteki, takie jak Adafruit DHT Library, upraszczają implementację.
   
-```C
-void readDHT(float &humidity, float &temperature, float &fahrenheit) {
-  humidity = dht.readHumidity();
-  temperature = dht.readTemperature();
-  fahrenheit = dht.readTemperature(true);
-
-  if (isnan(humidity) || isnan(temperature) || isnan(fahrenheit)) {
-    display.println(F("Failed to read from DHT sensor!"));
-  }
-}
-```
-
 #### Obsługa wyświetlacza przez I2C ####
 Wyświetlacz LCD został podłączony do ESP za pomocą protokołu I2C, co znacząco redukuje liczbę wymaganych linii połączeń. Wyświetlacz pełni funkcję prezentacji danych, takich jak odczyty z czujnika temperatury i inne komunikaty systemowe.
 
@@ -74,21 +64,6 @@ Wyświetlacz LCD został podłączony do ESP za pomocą protokołu I2C, co znacz
 
   **SCL (Serial Clock):** Linia zegara, synchronizująca komunikację. <br>
   **SDA (Serial Data):** Linia danych, przesyłająca informacje między ESP a wyświetlaczem.
-
-```C
-void displayData(float humidity, float temperature) {
-  display.clearDisplay();
-  display.setCursor(0,0);
-  display.print(F("Wilgotnosc: "));
-  display.print(humidity);
-  display.print(F("%"));
-  display.setCursor(0,10);
-  display.print(F("Temperatura: "));
-  display.print(temperature);
-  display.print(F("C"));
-  display.display();
-}
-```
 
 ### Docker - Grafana oraz InfluxDB ###
 
