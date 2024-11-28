@@ -102,5 +102,30 @@ Wizualizację danych w formie tabel, wykresów liniowych, słupkowych czy wskaź
 
 ### Speech-to-text ###
 
+#### Ogólny opis technologii #### 
+Moduł Speech-to-Text jest odpowiedzialny za przekształcenie mowy na tekst, wykorzystując model językowy Whisper opracowany przez OpenAI. Whisper to zaawansowany system transkrypcji mowy, który cechuje się wysoką dokładnością oraz wsparciem dla wielu języków, w tym języka polskiego. Model został zaprojektowany do analizy strumieni audio i generowania tekstu w czasie rzeczywistym lub na podstawie nagrań.
+
+* **Działanie w projekcie:**
+
+*System nasłuchuje strumień dźwiękowy lub przetwarza plik audio.
+*Po zidentyfikowaniu wypowiedzianych słów przekształca je w tekst, który jest przesyłany za pomocą protokołu MQTT do brokera.
+*ESP8266 odbiera tekst i wyświetla go na LCD, prezentując wyniki na górnej linii wyświetlacza.
+
 ### Video-to-text ###
+
+Ogólny opis technologii
+Moduł Video-to-Text zajmuje się przetwarzaniem obrazu w czasie rzeczywistym w celu identyfikacji obiektów oraz ich opisywania w postaci tekstowej. W projekcie wykorzystano model YOLO (You Only Look Once) do analizy obrazu. YOLO jest zaawansowaną siecią neuronową zdolną do jednoczesnej detekcji i klasyfikacji obiektów na obrazach lub w strumieniach wideo.
+
+#### Działanie w projekcie: ####
+
+*System analizuje obrazy z kamery wideo w czasie rzeczywistym lub przetwarza zapisane materiały.
+*Model YOLO identyfikuje obiekty w kadrze, przypisuje im nazwy (np. "cat", "car", "person") i generuje odpowiedni tekst.
+*Wynikowa informacja tekstowa jest przesyłana za pomocą MQTT do brokera.
+*ESP8266 odbiera tekst i wyświetla go na LCD, prezentując nazwy obiektów na dolnej linii wyświetlacza.
+
+* **Zastosowane technologie:**
+
+*YOLO: Model wyróżnia się szybkością działania, co czyni go idealnym rozwiązaniem dla systemów pracujących w czasie rzeczywistym.
+*Python i OpenCV: Do obsługi strumieni wideo oraz integracji z modelem YOLO.
+*MQTT: Zapewnia komunikację między modułem analizy obrazu a ESP8266.
 
