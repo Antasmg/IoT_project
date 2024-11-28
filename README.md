@@ -48,9 +48,8 @@ Wyświetlacz LCD został podłączony do ESP za pomocą protokołu I2C, co znacz
 * Linie sygnałowe I2C:
   Standardowe połączenie I2C wykorzystuje dwie linie sygnałowe:
 
-  **SCL (Serial Clock):** Linia zegara, synchronizująca komunikację.
-  
-  **SDA (Serial Data):** Linia danych, przesyłająca informacje między ESP a wyświetlaczem.
+  ** SCL (Serial Clock):** Linia zegara, synchronizująca komunikację. <br>
+  ** SDA (Serial Data):** Linia danych, przesyłająca informacje między ESP a wyświetlaczem.
 
 ```C
 void displayData(float humidity, float temperature) {
