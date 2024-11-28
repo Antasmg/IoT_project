@@ -37,6 +37,7 @@ Wyświetlacz LCD został podłączony do ESP za pomocą protokołu I2C, co znacz
   Standardowe połączenie I2C wykorzystuje dwie linie sygnałowe:
 
   **SCL (Serial Clock):** Linia zegara, synchronizująca komunikację.
+  
   **SDA (Serial Data):** Linia danych, przesyłająca informacje między ESP a wyświetlaczem.
 
 
