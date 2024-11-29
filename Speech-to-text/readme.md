@@ -1,7 +1,7 @@
 # Speech-To-Text Whisper #
 
 ## Spis treści ##
-* Opis
+* [Opis][#Opis]
 * Wymagania
 * Schemat połączeń
 * Konfiguracja
