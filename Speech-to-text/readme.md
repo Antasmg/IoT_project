@@ -2,9 +2,9 @@
 
 ## Spis treści ##
 * [Opis](#Opis)
-* Wymagania
-* Schemat połączeń
-* Konfiguracja
+* [Wymagania](#Wymagania)
+  * [Biblioteki](#Biblioteki)
+* [Instrukcja](#Instrukcja)
 
 
 ## Opis ##
