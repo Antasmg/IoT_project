@@ -78,7 +78,7 @@ def detect_objects(client):
 
 def connect_to_mqtt():
     print("Łączenie z brokerem MQTT...")
-    client = mqtt.Client()
+    client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1)
     client.username_pw_set(MQTT_USERNAME, MQTT_PASS)
     client.on_connect = on_connect
     pwd = os.getcwd()

@@ -30,4 +30,4 @@ Aby uruchomić program w środowisku wirtuanym należy:
   1.  Stworzyć nowe środowisko wirtualne za pomoca komendy `python -m venv <nazwa_srodowiska>`
   2.  aktywować środowisko wirtualne za pomocą (dla Windows): `<nazwa_srodowiska>\Scripts\activate`
   3.  Zainstalować zależności programu tj.: `pip install openai-whisper pyaudio torchaudio portaudio19-dev python3-pyaudio`
-  4.  Uruchomić program za pomocą `python speec-to-text.py`. Terminal musi być w katalogu środowiska wirtualnego
+  4.  Uruchomić program za pomocą `python speech-to-text.py`. Terminal musi być w katalogu środowiska wirtualnego

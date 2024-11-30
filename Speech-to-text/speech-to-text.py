@@ -1,6 +1,7 @@
 ﻿import pyaudio
 import wave
 import whisper
+import os
 
 # Konfiguracja audio
 CHUNK = 1024  # Wielkość bufora
@@ -38,8 +39,16 @@ def record_audio():
 # Funkcja transkrypcji za pomocą Whisper
 def transcribe_audio():
     model = whisper.load_model("medium")
-    result = model.transcribe("output.wav", language="pl")
-    print("Transkrypcja:", result["text"])
+    try:
+         model = whisper.load_model("medium")
+         if not os.path.exists(OUTPUT_FILENAME):
+             print(f"Błąd: Plik {OUTPUT_FILENAME} nie istnieje")
+             return
+         result = model.transcribe(OUTPUT_FILENAME, language="pl")
+         print("Transkrypcja:", result["text"])
+         print("Transkrypcja:", result)
+    except Exception as e:
+         print(f"Wystąpił błąd podczas transkrypcji: {e}")
 
 # Główna funkcja
 if __name__ == "__main__":
