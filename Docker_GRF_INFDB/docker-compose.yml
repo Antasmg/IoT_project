@@ -32,6 +32,23 @@
     networks:
       internal_network:
         ipv4_address: 192.168.10.100
+  mqtt_subscriber:
+    build: .
+    container_name: mqtt_subscriber_cdv
+    restart: unless-stopped
+    volumes:
+      - .:/app
+    depends_on:
+      - influxdb
+    networks:
+      internal_network:
+        ipv4_address: 192.168.10.151
+    environment:
+      - CA_CERT_PATH=/app/emqxsl-ca.crt  # ścieżka do certyfikatu w kontenerze
+
+secrets:
+  ca_certificate:
+    file: ./emqxsl-ca.crt
 
 # Containers Volumes
 volumes:

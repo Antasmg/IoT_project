@@ -6,6 +6,8 @@ import time
 import os
 from datetime import datetime
 import ssl
+import logging
+
 
 # Konfiguracja MQTT
 MQTT_BROKER = "n9ee4478.ala.eu-central-1.emqxsl.com"
@@ -15,10 +17,15 @@ MQTT_USERNAME = "laptop"
 MQTT_PASS = "public"
 
 # Konfiguracja InfluxDB
-INFLUXDB_URL = "http://localhost:8086"
+INFLUXDB_URL = "http://influxdb:8086"
 INFLUXDB_TOKEN = "wPN8tQSMj-zwc5j9NDevqHRvLoBXwa6uXrA21Wx0zf--BE1YNJlLXpPD7mdlsfvzJkXRAy8RJ13Y8P52A-pG6g=="  # Token do autoryzacji
 INFLUXDB_ORG = "cdv"          # Nazwa organizacji
 INFLUXDB_BUCKET = "cdv"  # Nazwa bucketa
+
+CA_CERT_PATH = os.getenv('CA_CERT_PATH', './emqxsl-ca.crt')
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 # Inicjalizacja klienta InfluxDB
 influx_client = InfluxDBClient(
@@ -29,13 +36,13 @@ influx_client = InfluxDBClient(
 write_api = influx_client.write_api(write_options=SYNCHRONOUS)
 
 def on_connect(client, userdata, flags, rc):
-    print("Połączono z MQTT Brokerem z kodem: " + str(rc))
+    logger.info(f"Connection result code: {rc}")
     client.subscribe(MQTT_TOPIC)
-    print(f"Zasubskrybowano topic: {MQTT_TOPIC}")
+    logger.info(f"Zasubskrybowano topic: {MQTT_TOPIC}")
 
 def on_message(client, userdata, msg):
     """Callback wywoływany po otrzymaniu wiadomości MQTT"""
-    print("Receive a message")
+    logger.info("Receive a message")
     try:
         # Próba parsowania otrzymanych danych jako JSON
         data = json.loads(msg.payload.decode())
@@ -46,19 +53,18 @@ def on_message(client, userdata, msg):
 
         # Zapis do InfluxDB
         write_api.write(bucket=INFLUXDB_BUCKET, record=point)
-        print(f"Zapisano dane: {data}")
+        logger.info(f"Zapisano dane: {data}")
 
     except Exception as e:
-        print(f"Błąd podczas przetwarzania wiadomości: {e}")
+        logger.info(f"Błąd podczas przetwarzania wiadomości: {e}")
+
 
 def connect_to_mqtt():
-    print("Łączenie z brokerem MQTT...")
+    logger.info("Łączenie z brokerem MQTT...")
     client = mqtt.Client()
     client.username_pw_set(MQTT_USERNAME, MQTT_PASS)
     client.on_connect = on_connect
-    pwd = os.getcwd()
-    print(pwd)
-    cert = pwd + "/emqxsl-ca.crt"
+    cert = CA_CERT_PATH
     client.tls_set(cert, tls_version=ssl.PROTOCOL_TLSv1_2)
     client.tls_insecure_set(True)
     client.on_message = on_message
@@ -70,7 +76,7 @@ def connect_to_mqtt():
         client.loop_forever()
 
     except KeyboardInterrupt:
-        print("\nZatrzymywanie programu...")
+        logger.info("\nZatrzymywanie programu...")
         client.disconnect()
         influx_client.close()
 
