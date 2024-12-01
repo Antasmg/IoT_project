@@ -2,6 +2,8 @@
 import wave
 import whisper
 import os
+import paho.mqtt.client as mqtt
+import ssl
 
 # Konfiguracja audio
 CHUNK = 1024  # Wielkość bufora
@@ -10,6 +12,24 @@ CHANNELS = 1  # Liczba kanałów (mono)
 RATE = 16000  # Częstotliwość próbkowania
 RECORD_SECONDS = 5  # Czas nagrania w sekundach
 OUTPUT_FILENAME = "output.wav"  # Nazwa pliku wyjściowego
+
+MQTT_BROKER = "n9ee4478.ala.eu-central-1.emqxsl.com"
+MQTT_PORT = 8883
+MQTT_TOPIC = "video_to_text"
+MQTT_USERNAME = "laptop"
+MQTT_PASS = "public"
+
+def on_connect(client, userdata, flags, rc):
+    print("Połączono z MQTT Brokerem z kodem: " + str(rc))
+
+def send_message(client, message):
+    result = client.publish(MQTT_TOPIC, message)
+
+    status = result[0]
+    if status == 0:
+        print(f"Wysłano wiadomość do {MQTT_TOPIC}: {message}")
+    else:
+        print(f"Błąd podczas wysyłania wiadomości do {MQTT_TOPIC}")
 
 # Funkcja nagrywania audio
 def record_audio():
@@ -37,20 +57,38 @@ def record_audio():
         wf.writeframes(b''.join(frames))
 
 # Funkcja transkrypcji za pomocą Whisper
-def transcribe_audio():
-    model = whisper.load_model("medium")
+def transcribe_audio(client):
+    model = whisper.load_model("base")
     try:
-         model = whisper.load_model("medium")
+         model = whisper.load_model("base")
          if not os.path.exists(OUTPUT_FILENAME):
              print(f"Błąd: Plik {OUTPUT_FILENAME} nie istnieje")
              return
          result = model.transcribe(OUTPUT_FILENAME, language="pl")
          print("Transkrypcja:", result["text"])
-         print("Transkrypcja:", result)
+         send_message(client, result["text"])
     except Exception as e:
          print(f"Wystąpił błąd podczas transkrypcji: {e}")
 
+def connect_to_mqtt():
+    print("Łączenie z brokerem MQTT...")
+    client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1)
+    client.username_pw_set(MQTT_USERNAME, MQTT_PASS)
+    client.on_connect = on_connect
+    pwd = os.getcwd()
+    print(pwd)
+    cert = pwd + "/../emqxsl-ca.crt"
+    client.tls_set(cert, tls_version=ssl.PROTOCOL_TLSv1_2)
+    client.tls_insecure_set(True)
+    client.connect(MQTT_BROKER, MQTT_PORT, 60)
+    client.loop_start()
+
+    return client
+
 # Główna funkcja
 if __name__ == "__main__":
-    record_audio()
-    transcribe_audio()
+    client = connect_to_mqtt()
+
+    while True:
+        record_audio()
+        transcribe_audio(client)

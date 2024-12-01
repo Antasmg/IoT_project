@@ -83,7 +83,7 @@ def connect_to_mqtt():
     client.on_connect = on_connect
     pwd = os.getcwd()
     print(pwd)
-    cert = pwd + "/emqxsl-ca.crt"
+    cert = pwd + "/../emqxsl-ca.crt"
     client.tls_set(cert, tls_version=ssl.PROTOCOL_TLSv1_2)
     client.tls_insecure_set(True)
     client.connect(MQTT_BROKER, MQTT_PORT, 60)
