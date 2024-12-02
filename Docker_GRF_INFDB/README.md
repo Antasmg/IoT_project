@@ -5,6 +5,7 @@
 * [Wymagania](#Wymagania)
   * [Biblioteki](#Biblioteki)
 * [Instrukcja](#Instrukcja)
+* [Diagram przepływu](#diagram-przepływu)
 
 ## Opis ## 
 Plik docker-file służacy do wykorzystywania docker-compose pozwala na jednoczesne wdrożenie kontenerów z aplikacjami Grafana, InfluxDB oraz `subscriber.py`. 
@@ -54,3 +55,50 @@ Aby uruchomić kontenery należy:
 ## Subskrybent MQTT ##
 Plik `subscriber.py` działa jako osobny kontener Dockera, który subskrybuje temat MQTT i zapisuje dane do InfluxDB.
 Kontener `subscriber` subskrybuje temat `temperature` z brokera MQTT i zapisuje dane w buckecie w InfluxDB.
+
+## Diagram przepływu
+
+Diagram przedstawia szczegółowy przepływ logiczny kodu oraz interakcje pomiędzy modułami:
+
+```mermaid
+flowchart TD
+    A[Start Program] --> B[Import Libraries]
+    B --> C[Load Configuration]
+    C --> D[Initialize InfluxDB Client]
+    
+    D --> E[Create MQTT Client]
+    E --> F[Configure MQTT Credentials]
+    F --> G[Setup SSL/TLS]
+    
+    G --> H{Connect to MQTT}
+    H --> |Success| I[Subscribe to temperature topic]
+    H --> |Failure| J[Log Connection Error]
+    J --> K[Retry Connection]
+    K --> H
+    
+    I --> L[Start MQTT Loop]
+    
+    L --> M{Receive Message}
+    M --> |Yes| N[Process Message]
+    M --> |No| O[Wait for Messages]
+    O --> M
+    
+    N --> P{Valid JSON?}
+    P --> |Yes| Q[Create InfluxDB Point]
+    P --> |No| R[Log Parse Error]
+    R --> M
+    
+    Q --> S{Write to InfluxDB}
+    S --> |Success| T[Log Success]
+    S --> |Failure| U[Log Write Error]
+    
+    T --> M
+    U --> M
+    
+    M --> V{Keyboard Interrupt?}
+    V --> |Yes| W[Disconnect MQTT]
+    V --> |No| M
+    
+    W --> X[Close InfluxDB Client]
+    X --> Y[End Program]
+```
