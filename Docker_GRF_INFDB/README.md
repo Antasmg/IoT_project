@@ -7,8 +7,8 @@
 * [Instrukcja](#Instrukcja)
 
 ## Opis ## 
-Plik docker-file służacy do wykorzystywania docker-compose pozwala na jednoczesne wdrożenie kontenerów z aplikacjami Grafana oraz InfluxDB. 
-W projekcie kontener z InfluxDB służy do odbierania danych pochodzących z odczytów czujnika temperatury DHT11 podłączonego do ESP8266. Następnie Grafana pozwala nam na wizualizacje tych danych w formie przystępnych wykresów lub metryk.
+Plik docker-file służacy do wykorzystywania docker-compose pozwala na jednoczesne wdrożenie kontenerów z aplikacjami Grafana, InfluxDB oraz `subscriber.py`. 
+Program `subscriber.py` pełni funkcję subskrybenta MQTT i jest uruchamiany jako osobny kontener Dockera, który zapisuje dane przesłane przez ESP8266 do InfluxDB. Następnie Grafana pozwala nam na wizualizacje tych danych w formie przystępnych wykresów lub metryk.
 
 Plik .env służy do przechowywania zmiennych środowiskowych, w normalnych okolicznościach nie byłby on przesyłany do repozytorium i byłby zawarty w pliku .gitignore ze względów bezpieczeństwa. Plik te zawiera m.in. hasła oraz loginy do aplikacji. 
 
@@ -22,6 +22,7 @@ Do wykonania tej części projektu będzie wymagane:
 
 * Aplikacja Docker Desktop
 * Wstępnie utworzona sieć w środowisku Docker cdv_grafana
+* Certyfikat `emqxsl-ca.crt` do szyfrowanego połączenia z brokerem MQTT.
 
 W środowisku linux możemy osiągnąć to samo, lecz nie musimy nawet instalować aplikacji docker Desktop jeśli uznamy, że interfejs GUI nie jest nam potrzebny. 
 
@@ -29,12 +30,13 @@ W środowisku linux możemy osiągnąć to samo, lecz nie musimy nawet instalowa
 Obrazy z których korzystaliśmy w tym projekcie to
 * Oficjalny obraz Grafana:latest
 * Oficjalny obraz Influxdb:latest
+* Niestandardowy obraz oparty na python:3.9-slim dla subskrybenta MQTT.
 
 ## Instrukcja ##
 Aby uruchomić kontenery należy:
  1. Zainstalować oraz uruchomić aplikację Docker 
  2. Utworzyć sieć wirtualną cdv_grafana za pomocą `docker network create -d bridge cdv_grafana`
- 3. Wykonać plik docker-compose - znajdując się w katalogu pliku wykonać polecenie: `docker-compose up -d .`
+ 3. Wykonać plik docker-compose - znajdując się w katalogu pliku wykonać polecenie: `docker-compose up -d`
  4. Zalogować się do maszyn przez przeglądarkę, wykonać wstępną konfiguracje 
     * Grafana - `localhost:3000`
     * InfluxDB - `localhost:8086`
@@ -48,3 +50,7 @@ Aby uruchomić kontenery należy:
     * Default Bucket - Podajemy nazwę naszego bucketa
  7. Wykonujemy test połączenia i zapisujemy.
  8. Od tego momentu możemy tworzyć dashboard ze źródłem danych wykresów w postaci InfluxDB
+
+## Subskrybent MQTT ##
+Plik `subscriber.py` działa jako osobny kontener Dockera, który subskrybuje temat MQTT i zapisuje dane do InfluxDB.
+Kontener `subscriber` subskrybuje temat `temperature` z brokera MQTT i zapisuje dane w buckecie w InfluxDB.

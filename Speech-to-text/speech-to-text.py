@@ -10,8 +10,9 @@ CHUNK = 1024  # Wielkość bufora
 FORMAT = pyaudio.paInt16  # Format próbek audio
 CHANNELS = 1  # Liczba kanałów (mono)
 RATE = 16000  # Częstotliwość próbkowania
-RECORD_SECONDS = 5  # Czas nagrania w sekundach
+RECORD_SECONDS = 3  # Czas nagrania w sekundach
 OUTPUT_FILENAME = "output.wav"  # Nazwa pliku wyjściowego
+OUTPUT_PATH = "/output.wav"  # Nazwa pliku wyjściowego
 
 MQTT_BROKER = "n9ee4478.ala.eu-central-1.emqxsl.com"
 MQTT_PORT = 8883
@@ -50,7 +51,8 @@ def record_audio():
     audio.terminate()
 
     # Zapis do pliku WAV
-    with wave.open(OUTPUT_FILENAME, 'wb') as wf:
+    output_file = os.path.join(os.getcwd(), "..", "output.wav")
+    with wave.open(output_file, 'wb') as wf:
         wf.setnchannels(CHANNELS)
         wf.setsampwidth(audio.get_sample_size(FORMAT))
         wf.setframerate(RATE)
@@ -58,17 +60,19 @@ def record_audio():
 
 # Funkcja transkrypcji za pomocą Whisper
 def transcribe_audio(client):
-    model = whisper.load_model("base")
+    model = whisper.load_model("tiny")
     try:
-         model = whisper.load_model("base")
-         if not os.path.exists(OUTPUT_FILENAME):
-             print(f"Błąd: Plik {OUTPUT_FILENAME} nie istnieje")
-             return
-         result = model.transcribe(OUTPUT_FILENAME, language="pl")
-         print("Transkrypcja:", result["text"])
-         send_message(client, result["text"])
+        output_file = os.path.join(os.getcwd(), "..", "output.wav")
+        
+        if not os.path.exists(output_file):
+            print(f"Błąd: Plik {output_file} nie istnieje")
+            return
+        
+        result = model.transcribe(output_file, language="pl")
+        print("Transkrypcja:", result["text"])
+        send_message(client, result["text"])
     except Exception as e:
-         print(f"Wystąpił błąd podczas transkrypcji: {e}")
+        print(f"Wystąpił błąd podczas transkrypcji: {e}")
 
 def connect_to_mqtt():
     print("Łączenie z brokerem MQTT...")

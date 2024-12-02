@@ -45,15 +45,18 @@ def on_message(client, userdata, msg):
     logger.info("Receive a message")
     try:
         # Próba parsowania otrzymanych danych jako JSON
-        data = json.loads(msg.payload.decode())
-        
+        temperature = float(msg.payload.decode())
+    
         # Tworzenie punktu danych dla InfluxDB
         point = Point("temperature_measurement")\
-            .field("temperature", float(data.get('temperature', 0)))
+            .field("temperature", temperature)
+        
+        # (Dalsza logika zapisu do InfluxDB, np. write_api.write(...))
+        print(f"Temperature point created: {point}")
 
         # Zapis do InfluxDB
         write_api.write(bucket=INFLUXDB_BUCKET, record=point)
-        logger.info(f"Zapisano dane: {data}")
+        logger.info(f"Zapisano dane: {temperature}")
 
     except Exception as e:
         logger.info(f"Błąd podczas przetwarzania wiadomości: {e}")

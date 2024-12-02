@@ -3,9 +3,13 @@
 ## Spis treści
 - [Opis](#opis)
 - [Wymagania](#wymagania)
+  - [Sprzęt](#sprzęt)
+  - [Biblioteki](#biblioteki)
 - [Schemat połączeń](#schemat-połączeń)
+- [Diagram przepływu](#diagram-przepływu)
 - [Konfiguracja](#konfiguracja)
-- [Funkcjonalność](#funkcjonalność)
+  - [Parametry WiFi](#parametry-wifi)
+  - [Parametry MQTT](#parametry-mqtt)
 - [Użycie](#użycie)
 - [Struktura kodu](#struktura-kodu)
 - [Rozwiązywanie problemów](#rozwiązywanie-problemów)
@@ -25,16 +29,43 @@ Moduł ESP8266 służy jako urządzenie IoT, które:
 - Przewody połączeniowe
 
 ### Biblioteki
-```cpp
-#include <ESP8266WiFi.h>
-#include <PubSubClient.h>
-#include <time.h>
-#include <Adafruit_Sensor.h>
-#include <DHT.h>
-#include <LiquidCrystal_I2C.h>
-```
+Poniżej znajdują się wymagane biblioteki oraz instrukcje ich instalacji.
+
+1. **ESP8266WiFi**:
+   - Wbudowana w pakiet ESP8266 Arduino Core.
+   - Jeśli nie masz pakietu ESP8266, [dodaj go do Arduino IDE](https://arduino.esp8266.com/stable/package_esp8266com_index.json):
+     1. Otwórz **File > Preferences**.
+     2. W polu **Additional Board Manager URLs** dodaj powyższy link.
+     3. Otwórz **Tools > Board > Board Manager**, wyszukaj `ESP8266` i zainstaluj.
+
+2. **PubSubClient**:
+   - Obsługa MQTT.
+   - Instalacja:
+     1. Otwórz **Tools > Manage Libraries**.
+     2. Wyszukaj `PubSubClient` i kliknij **Install**.
+
+3. **Adafruit_Sensor**:
+   - Wspierana przez czujniki Adafruit, np. DHT11.
+   - Instalacja:
+     1. Otwórz **Tools > Manage Libraries**.
+     2. Wyszukaj `Adafruit Unified Sensor` i kliknij **Install**.
+
+4. **DHT**:
+   - Biblioteka do obsługi czujnika DHT11.
+   - Instalacja:
+     1. Otwórz **Tools > Manage Libraries**.
+     2. Wyszukaj `DHT sensor library` i kliknij **Install**.
+
+5. **LiquidCrystal_I2C**:
+   - Do obsługi wyświetlacza LCD z interfejsem I2C.
+   - Instalacja:
+     1. Otwórz **Tools > Manage Libraries**.
+     2. Wyszukaj `LiquidCrystal_I2C` i kliknij **Install**.
 
 ## Schemat połączeń
+Poniżej znajduje się schemat połączeń modułu ESP8266 z czujnikiem DHT11 oraz wyświetlaczem LCD:
+
+![Schemat połączeń](esp8266-wiring-svg-organized.svg)
 - DHT11:
   - PIN danych: GPIO14 (D5)
   - VCC: 3.3V
@@ -44,6 +75,67 @@ Moduł ESP8266 służy jako urządzenie IoT, które:
   - SCL: GPIO5 (D1)
   - VCC: 3.3V
   - GND: GND
+
+## Diagram przepływu
+
+Diagram przedstawia szczegółowy przepływ logiczny kodu oraz interakcje pomiędzy modułami:
+
+```mermaid
+flowchart TD
+    A[Start Program] --> B[Initialize Serial]
+    B --> C[Initialize LCD]
+    C --> D[Initialize DHT11]
+    
+    D --> E[Connect to WiFi]
+    E --> F{WiFi Connected?}
+    F --> |No| G[Wait 1s]
+    G --> E
+    F --> |Yes| H[Sync Time with NTP]
+    
+    H --> I{Time Synced?}
+    I --> |No| J[Wait 1s]
+    J --> H
+    I --> |Yes| K[Setup MQTT Client]
+    
+    K --> L[Connect to MQTT Broker]
+    L --> M{MQTT Connected?}
+    M --> |No| N[Log SSL Error]
+    N --> O[Wait 5s]
+    O --> L
+    
+    M --> |Yes| P[Subscribe to Topics]
+    P --> Q[Publish Welcome Message]
+    
+    Q --> R[Start Main Loop]
+    R --> S{Check MQTT Connection}
+    S --> |Not Connected| L
+    S --> |Connected| T[Process MQTT Messages]
+    
+    T --> U{Time for DHT Reading?}
+    U --> |No| V[Short Wait]
+    U --> |Yes| W[Read DHT Sensor]
+    
+    W --> X{Read Success?}
+    X --> |No| Y[Log Sensor Error]
+    X --> |Yes| Z[Format Temperature Data]
+    
+    Z --> AA[Publish to MQTT]
+    AA --> BB[Update Last Check Time]
+    
+    BB --> CC{New MQTT Message?}
+    Y --> CC
+    V --> CC
+    
+    CC --> |Yes| DD[Process Message Length]
+    CC --> |No| S
+    
+    DD --> EE{Message > 16 chars?}
+    EE --> |Yes| FF[Scroll Message on LCD]
+    EE --> |No| GG[Display Full Message]
+    
+    FF --> S
+    GG --> S
+
 
 ## Konfiguracja
 ### Parametry WiFi
