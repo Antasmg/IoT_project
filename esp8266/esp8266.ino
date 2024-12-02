@@ -209,6 +209,8 @@ void mqttCallback(char *topic, byte *payload, unsigned int length) {
         message += (char)payload[i];
     }
 
+    message = replacePolishChars(message);
+
     if (length > 16){
       for (unsigned int start = 0; start < length; start += 16) {
             String fragment = message.substring(start, start + 16);
@@ -216,9 +218,7 @@ void mqttCallback(char *topic, byte *payload, unsigned int length) {
             lcd.print("                "); // Czyszczenie linii
             lcd.setCursor(0, cursorPosition);
             lcd.print(fragment);
-
-            // Czekaj chwilę (np. 1 sekunda)
-            delay(250);
+            delay(750);
         }
     }
     else{
@@ -234,6 +234,29 @@ void mqttCallback(char *topic, byte *payload, unsigned int length) {
     Serial.print(": ");
     Serial.println(message);
 }
+
+String replacePolishChars(String text) {
+    text.replace("ą", "a");
+    text.replace("ć", "c");
+    text.replace("ę", "e");
+    text.replace("ł", "l");
+    text.replace("ń", "n");
+    text.replace("ó", "o");
+    text.replace("ś", "s");
+    text.replace("ź", "z");
+    text.replace("ż", "z");
+    text.replace("Ą", "A");
+    text.replace("Ć", "C");
+    text.replace("Ę", "E");
+    text.replace("Ł", "L");
+    text.replace("Ń", "N");
+    text.replace("Ó", "O");
+    text.replace("Ś", "S");
+    text.replace("Ź", "Z");
+    text.replace("Ż", "Z");
+    return text;
+}
+
 
 void loop() {
     lcd.setCursor(0, 0);
