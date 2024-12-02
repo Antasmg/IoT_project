@@ -135,7 +135,7 @@ flowchart TD
     
     FF --> S
     GG --> S
-
+```
 
 ## Konfiguracja
 ### Parametry WiFi
