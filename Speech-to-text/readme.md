@@ -19,7 +19,7 @@ Program:
 
 ## Wymagania ##
 Do uruchomienia tego skryptu potrzebujemy pythona w wersji > 3.11. Preferowane jest również utworzenie środowiska virtualnego w celu uniknięcia problemów z kompatybilnością bibliotek na komputerze hosta. 
-Warto wykorzystywać dokłądniejsze wersje modelu whisper dla osiągnięcia lepszych rezultatów z odczytywanego nagrania. Przykładowo wersja base - najprostsza jest najlżesza, lecz jest też najbardziej ograniczona i ma problemy z rozpoznawaniem wielu słów wypowiadanych przez użytkownika. Bazowo w skrypcie korzystalismy zatem z wersji medium która stanowi kompromis pomiędzy modelami bardzo obciązającymi system a modelami prostymi które nie rozpoznają słów. 
+Warto wykorzystywać dokłądniejsze wersje modelu whisper dla osiągnięcia lepszych rezultatów z odczytywanego nagrania. Przykładowo wersja base - najprostsza jest najlżesza, lecz jest też najbardziej ograniczona i ma problemy z rozpoznawaniem wielu słów wypowiadanych przez użytkownika. Bazowo w skrypcie korzystalismy zatem z wersji medium która stanowi kompromis pomiędzy modelami bardzo obciązającymi system a modelami prostymi które nie rozpoznają słów. Wymagany jest również mikrofon do nagrywania dźwięku.
 
 Wersje modelu można zmienić w zmiennej: `model = whisper.load_model("<Wersja>")` w linijce 40
 
