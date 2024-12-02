@@ -5,6 +5,7 @@
 * [Wymagania](#Wymagania)
   * [Biblioteki](#Biblioteki)
 * [Instrukcja](#Instrukcja)
+* [Diagram przepływu](#diagram-przepływu)
 
 
 ## Opis ##
@@ -34,3 +35,53 @@ Aby uruchomić program w środowisku wirtuanym należy:
   2.  aktywować środowisko wirtualne za pomocą (dla Windows): `<nazwa_srodowiska>\Scripts\activate`
   3.  Zainstalować zależności programu tj.: `pip install openai-whisper pyaudio torchaudio portaudio19-dev python3-pyaudio paho-mqtt`
   4.  Uruchomić program za pomocą `python speech-to-text.py`. Terminal musi być w katalogu środowiska wirtualnego
+
+## Diagram przepływu
+
+Diagram przedstawia szczegółowy przepływ logiczny kodu oraz interakcje pomiędzy modułami:
+
+```mermaid
+flowchart TD
+    A[Start Program] --> B[Import Libraries]
+    B --> C[Configure Audio Settings]
+    C --> D[Configure MQTT Settings]
+    
+    D --> E[Connect to MQTT Broker]
+    E --> F{MQTT Connected?}
+    F --> |No| G[Log Connection Error]
+    G --> E
+    F --> |Yes| H[Start MQTT Loop]
+    
+    H --> I[Enter Main Loop]
+    
+    I --> J[Initialize PyAudio]
+    J --> K[Open Audio Stream]
+    
+    K --> L[Record Audio]
+    L --> M[Process Audio Chunks]
+    M --> N[Save to WAV File]
+    
+    N --> O[Close Audio Stream]
+    O --> P[Terminate PyAudio]
+    
+    P --> Q[Load Whisper Model]
+    Q --> R{File Exists?}
+    
+    R --> |No| S[Log File Error]
+    R --> |Yes| T[Transcribe Audio]
+    
+    T --> U{Transcription Success?}
+    U --> |No| V[Log Transcription Error]
+    U --> |Yes| W[Format Message]
+    
+    W --> X[Publish to MQTT]
+    X --> Y{Publish Success?}
+    
+    Y --> |No| Z[Log Publishing Error]
+    Y --> |Yes| AA[Log Success]
+    
+    Z --> I
+    AA --> I
+    S --> I
+    V --> I
+```

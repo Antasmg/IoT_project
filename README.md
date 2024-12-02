@@ -33,19 +33,19 @@
 Projekt skupia się na wykorzystaniu mikrokontrolera ESP3866 do następujących zadań:
 
 * Odczytywanie temperatury z czujnika,
-* Wyświetlanie odczytu na ekranie LCD,
+* Wyświetlanie odczytu w terminalu,
 * Przesyłałnie komunikatów o odczytach za pomocą protokołu MQTTs do brokera,
 * Przechowywanie danych za pomocą InnfluxDB stojącego jako kontener Docker,
 * Wizualizacja danych za pomocą aplikacji Grafana również stojącej w kontenerze Docker,
-* Wykorzystanie modułu ESP8266 w celu wykonywania operacji Speech-to-text za pomocą modelu językowego Whisper,
-* Wykorzystanie modułu ESP8266 w celu rozpoznawania obrazu za pomocą modelu językowego YOLO.
+* Wykorzystanie modułu ESP8266 w celu wyświetlenia na wyświetlaczu wyniku operacji Speech-to-text za pomocą modelu językowego Whisper,
+* Wykorzystanie modułu ESP8266 w celu wyświetlenia na wyświetlaczu wyniku rozpoznawania obrazu za pomocą modelu językowego YOLO.
 
 Dokładniejsze opisy każdego z zastosowanych elementów projektów znajduje się w podkatalogach. Opis na tej stronie jest oględny i ma za zadanie ogólne pokazanie wykorzystanych technologii. 
 
 ### ESP32 Temperatura oraz Ekran ###
 
 #### Odczyt temperatury z czujnika DHT11 #### 
-Moduł ESP32 (lub ESP8266) współpracuje z cyfrowym czujnikiem temperatury i wilgotności DHT11. Odczyt odbywa się przez dowolny pin cyfrowy, w naszym przypadku jest to pin 11. Czujnik ten dostarcza zarówno dane o temperaturze, jak i wilgotności w formacie cyfrowym, co eliminuje konieczność stosowania przetworników analogowo-cyfrowych.
+Moduł ESP32 (lub ESP8266) współpracuje z cyfrowym czujnikiem temperatury i wilgotności DHT11. Odczyt odbywa się przez dowolny pin cyfrowy, w naszym przypadku jest to pin 14. Czujnik ten dostarcza zarówno dane o temperaturze, jak i wilgotności w formacie cyfrowym, co eliminuje konieczność stosowania przetworników analogowo-cyfrowych.
 
 * Zasilanie czujnika:
   Czujnik DHT11 wymaga napięcia zasilania w zakresie od 3.3V do 5V. W naszym przypadku zasilanie jest dostarczane przez linię 3.3V z ESP. Linia GND zapewnia masę do układu.
