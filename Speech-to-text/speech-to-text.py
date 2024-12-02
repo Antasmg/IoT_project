@@ -16,7 +16,7 @@ OUTPUT_PATH = "/output.wav"  # Nazwa pliku wyjściowego
 
 MQTT_BROKER = "n9ee4478.ala.eu-central-1.emqxsl.com"
 MQTT_PORT = 8883
-MQTT_TOPIC = "video_to_text"
+MQTT_TOPIC = "speech_to_text"
 MQTT_USERNAME = "laptop"
 MQTT_PASS = "public"
 
