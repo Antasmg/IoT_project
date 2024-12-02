@@ -28,8 +28,8 @@ Do uruchomienia tego skryptu potrzebny jest Python w wersji > 3.8. Zalecane jest
 Aby uruchomić program w środowisku wirtuanym należy:
   1.  Stworzyć nowe środowisko wirtualne za pomoca komendy `python -m venv <nazwa_srodowiska>`
   2.  aktywować środowisko wirtualne za pomocą (dla Windows): `<nazwa_srodowiska>\Scripts\activate`
-  3.  Zainstalować zależności programu tj.: `pip install ultralytics opencv-python paho-mqttt`
-  4.  Uruchomić program za pomocą `python object_detection.py`. Terminal musi być w katalogu środowiska wirtualnego
+  3.  Zainstalować zależności programu tj.: `pip install ultralytics opencv-python paho-mqtt`
+  4.  Uruchomić program za pomocą `python video-to-text.py`. Terminal musi być w katalogu środowiska wirtualnego
 
   
 ## Dodatkowe informacje ##
